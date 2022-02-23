@@ -6,10 +6,12 @@ import AppContext from "./store/AppContext";
 import Routes from './utils/route/route'
 import Auth from "./utils/route/Auth";
 import Guest from "./utils/route/Guest";
+import Loading from "./component/Loading";
+import NotFound from "./component/NotFound";
 
 function App(){
 
-    const [isLogin,setIsLogin] = useState(false);
+    const [isLogin,setIsLogin] = useState(null);
     const [user,setUser] = useState([]);
 
     useEffect(() => {
@@ -23,6 +25,9 @@ function App(){
 
     },[])
 
+
+    if(isLogin == null) return <Loading />
+
     return (
         <div>
             <Router>
@@ -32,21 +37,23 @@ function App(){
                         {
                             Routes.map((val,key) => {
                                 if(val.protected == 'auth'){
-                                    return (<Auth exact={true} path={val.path} component={val.component} key={key}/>)
+                                    return (<Auth exact={true} path={val.path} component={val.components} key={key}/>)
                                 }
 
                                 if(val.protected == 'guest'){
-                                    return (<Guest exact={true} path={val.path} component={val.component} key={key}/>)
+                                    return (<Guest exact={true} path={val.path} component={val.components} key={key}/>)
                                 }
 
-                                return (<Route exact={true} path={val.path} component={val.component} key={key}/>)
+                                return (<Route exact={true} path={val.path} component={val.components} key={key}/>)
                             })
                         }
                         {
-                            !isLogin && <Route exact={true} path="/login">
-                                            <Login changeAuth={(auth) => setIsLogin(auth)} handleLoginData={(val) => setUser(val)}/>
-                                        </Route>
+                            <Guest exact={true} path="/login" component={() => <Login changeAuth={(auth) => setIsLogin(auth)} handleLoginData={(val) => setUser(val)} />} />
                         }
+
+                        <Route path="*">
+                            <NotFound />
+                        </Route>
 
                     </Switch>
                 </AppContext.Provider>

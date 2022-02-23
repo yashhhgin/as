@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import {useHistory} from "react-router-dom";
 
@@ -23,7 +23,7 @@ function Login({changeAuth,handleLoginData}){
     function handelSubmit(e){
         e.preventDefault();
 
-        axios.post(process.env.REACT_APP_API,form)
+        axios.post(`${process.env.REACT_APP_API}/login`,form)
             .then(res => {
                 res.data.data.length != 0
                     ? handleStatus(true,res.data.data)
@@ -41,9 +41,13 @@ function Login({changeAuth,handleLoginData}){
     return (
         <div>
             <form onSubmit={handelSubmit}>
-                <input type="text" name="email" onChange={handelChange} value={form.email}/>
-                <input type="text" name="password" onChange={handelChange} value={form.password}/>
-                <input type="submit" />
+                <div className="w-full my-6">
+                    <input className="p-2 rounded shadow w-full text-black" placeholder="Email or Username" type="text" name="email" onChange={handelChange} value={form.email}/>
+                </div>
+                <div className="w-full my-6">
+                    <input className="p-2 rounded shadow w-full text-black" placeholder="Email or Password" type="text" name="password" onChange={handelChange} value={form.password}/>
+                </div>
+                <button type="submit" className="p-2 rounded shadow w-full bg-gradient-to-tr from-yellow-600 to-yellow-400 text-black">Login</button>
             </form>
         </div>
     )

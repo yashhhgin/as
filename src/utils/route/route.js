@@ -4,12 +4,12 @@ import Picture from './../../page/Picture'
 export default [
     {
         path:"/",
-        component:() => <Home />,
+        components:() => <Home />,
         protected:''
     },
     {
         path:"/picture",
-        component:() => <Picture />,
+        components:() => <Picture />,
         protected:'auth'
     }
 ]
